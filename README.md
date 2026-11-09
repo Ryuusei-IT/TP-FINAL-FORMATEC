@@ -1,4 +1,4 @@
-🌿 EcoGreen Systems - Trabajo Práctico Obligatorio
+🌿 EcoTech Solutions - Trabajo Práctico Obligatorio
 Repositorio oficial con el desarrollo completo del proyecto integrador para la capacitación de programación de FormaTEC. La aplicación simula un sistema integral de gestión y monitoreo ambiental para una organización de desarrollo sustentable.
 
 📂 Estructura y Módulos del Proyecto
