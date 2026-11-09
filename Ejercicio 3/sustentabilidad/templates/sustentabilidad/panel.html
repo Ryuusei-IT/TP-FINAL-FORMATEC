@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Sustentabilidad Administrativa</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f5fa;
+            margin: 0;
+            padding: 40px;
+            color: #2b2b2b;
+        }
+        h1 {
+            color: #5b21b6; /* Morado principal */
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(91, 33, 182, 0.06);
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            border: 1px solid #ede9fe;
+        }
+        .card h2 {
+            font-size: 19px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #4c1d95; /* Morado oscuro */
+            font-weight: 600;
+        }
+        .card p {
+            margin: 10px 0;
+            font-size: 15px;
+            color: #374151;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #f3e8ff;
+            font-size: 15px;
+        }
+        th {
+            background-color: #f3e8ff; /* Morado muy claro / pastel */
+            color: #5b21b6; /* Letras moradas */
+            font-weight: 600;
+            width: 50%;
+        }
+        td {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        tr:hover td {
+            background-color: #faf5ff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Panel de Sustentabilidad Administrativa</h1>
+
+    <div class="card">
+        <h2>Resumen Ejecutivo de Emisiones</h2>
+        <p><strong>Total Global de Emisiones:</strong> {{ total_emisiones|floatformat:2 }} kgCO2e</p>
+        <p><strong>Planta de Mayor Consumo:</strong> {{ planta_mayor_consumo }}</p>
+    </div>
+
+    <div class="card">
+        <h2>Desglose por Planta Industrial</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Planta</th>
+                    <th>Emisiones (kgCO2e)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for planta, emisiones in detalles_emisiones.items %}
+                <tr>
+                    <td>{{ planta }}</td>
+                    <td>{{ emisiones|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
