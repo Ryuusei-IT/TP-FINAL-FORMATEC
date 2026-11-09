@@ -1,3 +1,3 @@
 # TP-FINAL-FORMATEC
 
-Trabajo practica para el profe sucutrule
+Trabajo practico para el profe sucutrule
