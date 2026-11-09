@@ -18,3 +18,5 @@ Django (Framework web bajo patrón MVT)
 Unittest (Suite de pruebas y validaciones)
 
 Bootstrap 5 & CSS (Diseño y estilos de la interfaz)
+
+Autor: Mauro Valdez
