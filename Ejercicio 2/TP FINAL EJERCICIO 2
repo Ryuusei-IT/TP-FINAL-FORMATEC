@@ -1,0 +1,99 @@
+# EJERCICIO 2
+
+import json
+
+# 1. Definición de la Excepcion Personalizada
+class StockInvalidoError(Exception):
+    """Excepción lanzada cuando se intenta asignar un stock negativo."""
+    pass
+
+
+
+# 2. Clase Base: Dispositivo Ecologico
+class DispositivoEcológico:
+    def __init__(self, modelo: str, precio: float, stock: int):
+        self.modelo = modelo
+        self.precio = precio
+        self.set_stock(stock)  # Validación mediante setter
+
+    def get_stock(self) -> int:
+        return self.__stock
+
+    def set_stock(self, nuevo_stock: int):
+        if nuevo_stock < 0:
+            raise StockInvalidoError("El stock no puede tomar valores negativos.")
+        self.__stock = nuevo_stock
+
+    def obtener_ficha_tecnica(self) -> str:
+        return f"Modelo: {self.modelo} | Precio: ${self.precio} | Stock: {self.get_stock()}"
+
+    def a_diccionario(self) -> dict:
+        return {
+            "modelo": self.modelo,
+            "precio": self.precio,
+            "stock": self.get_stock()
+        }
+
+
+
+# 3. Clase Hija: Panelsolar
+class PanelSolar(DispositivoEcológico):
+    def __init__(self, modelo: str, precio: float, stock: int, eficiencia_watts: int):
+        super().__init__(modelo, precio, stock)
+        self.eficiencia_watts = eficiencia_watts
+
+    def obtener_ficha_tecnica(self) -> str:
+        
+        ficha_base = super().obtener_ficha_tecnica()
+        return f"{ficha_base} | Potencia: {self.eficiencia_watts}W (Dispositivo de Alta Eficiencia)"
+
+    def a_diccionario(self) -> dict:
+        datos = super().a_diccionario()
+        datos["eficiencia_watts"] = self.eficiencia_watts
+        return datos
+
+
+
+# 4. Clase Gestorinventario
+class GestorInventario:
+
+    def guardar_catalogo_json(lista_dispositivos: list, ruta_archivo: str):
+        catalogo = [disp.a_diccionario() 
+                    
+        for disp in lista_dispositivos]
+        
+        with open(ruta_archivo, "w", encoding="utf-8") as f:
+            json.dump(catalogo, f, indent=4)
+        print(f"Catálogo guardado exitosamente en {ruta_archivo}")
+
+
+# 5. Bloque principal de prueba y demostracion
+if __name__ == "__main__":
+    
+    try:
+        print("Intentando crear dispositivo con stock inválido...")
+        dispositivo_prueba = DispositivoEcológico("Termostato-Error", 350.0, -5)
+    except StockInvalidoError as error:
+        print(f"[REGLA DE NEGOCIO ENMANEJADA]: {error}")
+
+    panel1 = PanelSolar(
+        "Solar 20 ProMax",
+        1200.0,
+        10,
+        500
+    )
+    
+    dispositivo_base = DispositivoEcológico(
+        "TermoMI X5 PRO",
+        350.0,
+        5
+    )
+
+    print("\n--- Fichas Técnicas ---")
+    print(panel1.obtener_ficha_tecnica())
+    print(dispositivo_base.obtener_ficha_tecnica())
+
+    catalogo = [panel1, dispositivo_base]
+
+    print("\n--- Persistencia en Disco ---")
+    GestorInventario.guardar_catalogo_json(catalogo, "catalogo_ecotech.json")

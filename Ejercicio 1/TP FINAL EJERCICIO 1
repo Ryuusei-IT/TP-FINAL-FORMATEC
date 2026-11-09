@@ -1,0 +1,99 @@
+# EJERCICIO 1
+
+def limpiar_registro_sensor(registro_raw: dict) -> dict:
+    
+    sensor_id_raw = registro_raw.get("sensor_id", "DESCONOCIDO")
+    sensor_id_limpio = sensor_id_raw.strip()
+    
+    temp_cruda = str(registro_raw.get("temperatura", "0"))
+    temp_limpia = temp_cruda.replace("C", "").replace("°", "").strip()
+    temperatura_float = float(temp_limpia)
+    
+    ubicacion = registro_raw.get("ubicacion", "Planta Desconocida")
+    
+    if not ubicacion or ubicacion.strip() == "":
+        ubicacion = "Planta Desconocida"
+    else:
+        ubicacion = ubicacion.strip()
+        
+    return {
+        "sensor_id": sensor_id_limpio,
+        "temperatura": temperatura_float,
+        "ubicacion": ubicacion
+    }
+
+def generar_resumen_sensores(lista_sensores_limpios: list, umbral_temperatura: float) -> tuple:
+
+    if not lista_sensores_limpios:
+        return [], 0.0
+        
+    sensores_alerta = []
+    suma_temperaturas = 0.0
+    total_sensores = len(lista_sensores_limpios)
+    
+    for sensor in lista_sensores_limpios:
+        temp_actual = sensor["temperatura"]
+        suma_temperaturas += temp_actual
+        
+    
+        if temp_actual > umbral_temperatura:
+            sensores_alerta.append(sensor["sensor_id"])
+            
+    promedio_temperatura = suma_temperaturas / total_sensores
+    
+    return sensores_alerta, promedio_temperatura
+
+#----------------------
+# Bloque principal
+#----------------------
+
+if __name__ == "__main__":
+
+    registros_raw = [
+        {
+        "sensor_id": " SENSOR-001 ",
+        "temperatura": "24.5C",
+        "ubicacion": "Planta Norte"
+        },
+
+        {
+        "sensor_id": "SENSOR-002",
+        "temperatura": "31.2 C"
+        },
+
+        {
+        "sensor_id": "SENSOR-003 ",
+        "temperatura": "21.0 °C",
+        "ubicacion": "Planta Sur"
+        },
+
+        {
+        "sensor_id": " SENSOR-004",
+        "temperatura": "14.0 C",
+        "ubicacion": " Planta Este"
+        },
+
+        {
+        "sensor_id": " SENSOR-007 ",
+        "temperatura": "28.0°C",
+        "ubicacion": "Planta Oeste "
+        }
+    ]
+    
+    print("--- FLUJO 1: SANITIZACIÓN DE REGISTROS ---")
+    registros_limpios = []
+    
+    for registro in registros_raw:
+        sensor_procesado = limpiar_registro_sensor(registro)
+        registros_limpios.append(sensor_procesado)
+        print(f"{sensor_procesado}")
+
+    UMBRAL = 27.0
+    
+    #Resumen
+    ids_en_alerta, promedio_global = generar_resumen_sensores(registros_limpios, UMBRAL)
+    
+    print("\n--- FLUJO 2: CONSOLIDADO DE MONITOREO ---")
+    print(f"Promedio global de la planta: {promedio_global:.2f} °C")
+    print(f"Umbral de temperatura establecido: {UMBRAL} °C")
+    print(f"Dispositivos en estado de alerta: {ids_en_alerta}")
